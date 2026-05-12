@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: invoice-ocr-backend
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      STORAGE_DIR: /app/storage
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      ACCESS_TOKEN: ${ACCESS_TOKEN:-}
+    volumes:
+      - ./storage:/app/storage
+    networks:
+      - invoice-ocr
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: invoice-ocr-frontend
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    depends_on:
+      - backend
+    networks:
+      - invoice-ocr
+
+networks:
+  invoice-ocr:
+    driver: bridge
