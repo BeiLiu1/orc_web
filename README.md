@@ -30,7 +30,28 @@ cp .env.example .env
 APP_PORT=8080
 MAX_UPLOAD_MB=25
 ACCESS_TOKEN=your-token
+PYTHON_BASE_IMAGE=python:3.11-slim
+NODE_BASE_IMAGE=node:22-alpine
+NGINX_BASE_IMAGE=nginx:1.27-alpine
 ```
+
+如果服务器无法拉取 Docker Hub 的基础镜像，可以把上面三个基础镜像改成服务器能访问的镜像地址。例如先在服务器上测试：
+
+```bash
+docker pull python:3.11-slim
+docker pull node:22-alpine
+docker pull nginx:1.27-alpine
+```
+
+哪个失败，就在 `.env` 中替换哪个：
+
+```bash
+PYTHON_BASE_IMAGE=你的可用镜像地址/python:3.11-slim
+NODE_BASE_IMAGE=你的可用镜像地址/node:22-alpine
+NGINX_BASE_IMAGE=你的可用镜像地址/nginx:1.27-alpine
+```
+
+阿里云服务器建议优先使用自己的 ACR 镜像加速器，或者在 ACR 中订阅/同步海外源镜像后填写同步后的镜像地址。
 
 启动：
 
